@@ -1,0 +1,885 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+body.modal-open .modal {
+  display: flex !important;
+  height: 100%;
+  font-family: "Poppins", sans-serif;
+}
+
+.modal .modal-dialog {
+  margin: auto;
+  max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .modal .modal-dialog {
+    max-width: 670px;
+  }
+}
+
+.modal .modal-dialog {
+  .modal-content {
+    background-color: var(--upgram-checkout-background-color, #fff);
+    color: var(--upgram-checkout-text-color, #000);
+  }
+
+  input[type="text"],
+  input[type="url"],
+  input[type="email"],
+  textarea {
+    background-color: var(--upgram-checkout-background-color, #fff);
+    color: var(--upgram-checkout-text-color, #000);
+  }
+}
+
+.container-main {
+  width: 642px;
+  height: 782px;
+  gap: 21px;
+  padding: 32px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.12);
+}
+
+.background-1 {
+  background-color: #efeef4;
+}
+
+.img-top {
+  width: 164.295px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.stepper {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.info {
+  display: flex;
+  width: 32px;
+  height: 58px;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+
+.all-stars {
+  display: flex;
+  width: 576px;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.stars {
+  display: flex;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.text-stars {
+  color: #6a51b0;
+  text-align: center;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 22px;
+  /* 110% */
+  text-decoration-line: underline;
+  margin-bottom: 0;
+}
+
+.text-container {
+  margin-left: 10px;
+  padding-top: 4px;
+}
+
+.card {
+  display: flex;
+  width: 640px;
+  height: 586px;
+  padding: 32px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 21px;
+  flex-shrink: 0;
+}
+
+.title {
+  color: var(--Primary-Marine, #074885);
+  font-family: Montserrat;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 30px;
+  /* 125% */
+}
+
+.title-group {
+  display: flex;
+  height: 59px;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+  align-self: stretch;
+}
+
+.footer-measure {
+  padding: 40px 80px;
+  gap: 227.052px;
+  background-color: red;
+}
+
+.footer-image {
+  width: 50px;
+  height: 40px;
+}
+
+.termos {
+  gap: 45px;
+}
+
+.footer-link {
+  display: flex;
+  width: 206.27px;
+  height: 19px;
+  flex-direction: column;
+  justify-content: center;
+  color: #161c2d;
+  text-align: center;
+  font-family: Manrope;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 25.95px;
+  /* 173% */
+  letter-spacing: -0.1px;
+}
+
+.dropdown-main {
+  height: 56px;
+  padding: 12px 16px;
+  gap: 10px;
+  border-radius: 8px;
+  border: 2px solid #6a51b0;
+}
+
+.form-control {
+  display: flex;
+  height: 56px;
+  padding: 12px 16px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
+  align-self: stretch;
+  border-radius: 8px;
+  border: 1.4px solid #c9d5f7;
+  /* color: #e7e9ed; */
+  font-family: Manrope;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  /* 24px */
+  height: auto !important;
+}
+
+.title-main {
+  color: var(--Primary-Marine, #074885);
+  font-family: Montserrat;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 30px;
+  /* 125% */
+}
+
+.user-text {
+  color: var(--Neutral-C5, #4d4d4d);
+  font-family: Montserrat;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  /* 24px */
+}
+
+.btn-continue {
+  display: flex;
+  height: 67px;
+  padding: 12px 48px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  align-self: stretch;
+  border-radius: 8px;
+  background: #7c51f3;
+  color: #fff;
+  font-family: Montserrat;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.safe {
+  width: 575px;
+  padding: 0px 199px 9px 200px;
+}
+
+.safe-text {
+  width: 134px;
+  height: 55px;
+  flex-shrink: 0;
+  color: #c8b9f0;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
+  /* 24px */
+}
+
+.purple {
+  overflow: hidden;
+  color: #6a51b0;
+  text-overflow: ellipsis;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
+  /* 24px */
+}
+
+.title-1 {
+  color: var(--Primary-Marine, #074885);
+  font-family: Montserrat;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 30px;
+}
+
+.inputs {
+  width: 544px;
+  height: 32px;
+  display: flex;
+  height: 56px;
+  padding: 12px 16px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
+  align-self: stretch;
+  border-radius: 8px;
+  border: 1.4px solid #c9d5f7;
+}
+
+.containers {
+  width: 100%;
+  background-color: #ffffff;
+}
+
+.sections {
+  width: 640px;
+  height: 549px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.12);
+}
+
+.sections-2 {
+  width: 640px;
+  height: 485px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.12);
+}
+
+.sections-3 {
+  width: 622px;
+  height: 421px;
+}
+
+.card-4 {
+  width: 600px;
+  height: auto;
+  padding: 48px 40px;
+  gap: 12px;
+  border-radius: 8px;
+  background: var(--n-PureWhite, #fff);
+  box-shadow: 0px 12px 18px -9px rgba(12, 13, 26, 0.08);
+}
+
+.section-1-card-4 {
+  width: 520px;
+  height: 168px;
+}
+
+.content-1-card-4 {
+  padding: 12px 16px;
+}
+
+.logo-card-4 {
+  width: 64px;
+  height: 64px;
+}
+
+.user-name-card-4 {
+  color: var(--Neutro-Dark-01, #202029);
+  text-align: center;
+  font-family: Manrope;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 22px;
+}
+
+.user-name-descriptions-card-4 {
+  color: var(--Neutro-Dark-01, #202029);
+  text-align: center;
+  font-family: Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.instagram-likes-card-4 {
+  color: var(--Neutro-Dark-01, #202029);
+  font-family: Manrope;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 22px;
+}
+
+.description-logo-card-4 {
+  color: var(--Neutro-Dark-01, #202029);
+  font-family: Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.numbers-logo-card-4 {
+  color: var(--Neutro-Dark-01, #202029);
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.color-section-1-card-4 {
+  display: flex;
+  width: 90%;
+  padding: 12px 12px;
+  margin-left: 12px;
+  align-self: stretch;
+  border-radius: 6px;
+  background: #efeef4;
+}
+
+.text-select-imagens {
+  width: 100%;
+  margin-bottom: 0 !important;
+  color: #000;
+  font-family: Montserrat;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.img-cards {
+  width: 124px;
+  height: 124px;
+  border-radius: 6px;
+  gap: 1px;
+}
+
+.view-photo {
+  width: 514px;
+  height: 20px;
+  color: #6a51b0;
+  font-family: Montserrat;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: normal;
+}
+
+.popup {
+  width: 622px;
+  height: 421px;
+  padding: 48px 40px;
+  border-radius: 8px;
+  background: var(--n-PureWhite, #fff);
+  box-shadow: 0px 12px 18px -9px rgba(12, 13, 26, 0.08);
+  margin-bottom: 30px;
+}
+
+.close {
+  width: 32px;
+  height: 32px;
+  margin-right: 30px;
+  margin-top: 16px;
+}
+
+.close-4 {
+  width: 32px;
+  height: 32px;
+}
+
+.popup-icon {
+  width: 56px;
+  height: 56px;
+  padding: 2.8px;
+  margin-right: 16px;
+}
+
+.popup-text-1 {
+  color: var(--Neutro-Dark-01, #202029);
+  text-align: center;
+  font-family: Manrope;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 22px;
+  /* 91.667% */
+}
+
+.popup-text-2 {
+  color: var(--Neutro-Dark-03, #515063);
+  text-align: center;
+  font-family: Manrope;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 22px;
+  /* 122.222% */
+}
+
+.popup-text-3 {
+  color: var(--Neutro-Dark-01, #202029);
+  text-align: center;
+  font-family: Inter;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-bottom: 0px;
+}
+
+.popup-text-4 {
+  color: var(--Neutro-Dark-01, #202029);
+  text-align: center;
+  font-family: Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 0px;
+}
+
+.followers {
+  width: 542px;
+  height: 80px;
+  border-radius: 6px;
+  background: #efeef4;
+}
+
+.logo {
+  width: 86px;
+  height: 86px;
+  padding-left: 16px;
+}
+
+.click-text {
+  padding: 14px 80px 8px 0px;
+}
+
+.click-text-1 {
+  width: 424px;
+  color: #000;
+  font-family: Montserrat;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.compra-segura {
+  width: 306px;
+  height: 39px;
+  border-radius: 0px 0px 10px 10px;
+  opacity: 0px;
+  background-color: #4bb639;
+}
+
+#upgram-section-description img {
+  border-radius: 20px;
+}
+
+.upgram-root .upgram-product-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #074885;
+  line-height: 24px;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.upgram-product-description-button {
+  height: 56px;
+  min-width: 170px;
+  /* background: white; */
+  /* color: #6A51B0; */
+  text-align: center;
+  border-radius: 100px;
+  border: 1px solid #c9d5f7;
+  background: -webkit-linear-gradient(
+    93.91deg,
+    #614ddd 0%,
+    #af2bac 50.32%,
+    #af2b5b 99.86%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.upgram-product-description-button[data-state="active"] {
+  background: #6a51b0;
+  color: white;
+  -webkit-text-fill-color: unset;
+}
+
+.upgram-product-section {
+  display: none;
+}
+
+.upgram-product-section[data-state="active"] {
+  display: block;
+}
+
+.upgram-rating {
+  margin: 0;
+  vertical-align: middle;
+  font-family: WooCommerce;
+  font-size: 26px;
+  font-weight: 400;
+  height: 28px;
+  line-height: 28px;
+  overflow: hidden;
+  position: relative;
+  text-align: left;
+  width: 5.3em;
+}
+
+.upgram-rating:before {
+  content: "SSSSS";
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  white-space: nowrap;
+  color: #e1e1e1;
+}
+
+.upgram-rating span {
+  left: 0;
+  overflow: hidden;
+  padding-top: 1.5em;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.upgram-rating span:before {
+  content: "SSSSS";
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  white-space: nowrap;
+  color: #e2cc2d;
+}
+
+.upgram-input {
+  width: 100%;
+  min-height: 60px;
+  border: solid 1.5px #d2d2e0;
+  border-radius: 7px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 0 !important;
+}
+
+.upgram-input span {
+  height: 25px;
+  width: 25px;
+}
+
+.upgram-input input,
+.upgram-input textarea {
+  min-width: 0;
+  flex: 1;
+  border: none;
+  font-size: 16px;
+  font-weight: 400;
+  padding: 0 !important;
+  font-family: "Poppins", sans-serif;
+  border: none !important;
+}
+
+.upgram-input input:focus,
+.upgram-input textarea:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.upgram-input textarea::-webkit-scrollbar {
+  width: 20px;
+}
+.upgram-input textarea::-webkit-scrollbar-thumb {
+  background: #cad3f5;
+  border-radius: 100px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+
+.upgram-input-remove {
+  all: unset !important;
+  height: 100% !important;
+  color: #df2124 !important;
+  font-family: Poppins !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 21px !important;
+  border-left: 1.5px solid #d2d2e0 !important;
+  padding-left: 20px !important;
+  cursor: pointer !important;
+  min-height: 57px !important;
+}
+
+.upgram-other-products {
+  border-radius: 5px;
+  padding: 16px 18px;
+  border: 1.5px solid #dddfe1;
+}
+
+.upgram-other-products-remove {
+  all: unset !important;
+  height: 100% !important;
+  color: #df2124 !important;
+  font-family: Poppins !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 21px !important;
+  border-left: 1.5px solid #d2d2e0 !important;
+  padding-left: 20px !important;
+  cursor: pointer !important;
+  min-height: 57px !important;
+}
+
+.upgram-root .upgram-other-products-add {
+  font-size: 14px;
+  font-weight: 600;
+  background: linear-gradient(to right, #2161df 0%, #db265c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  width: 42px;
+  height: 28px;
+  border-radius: 12px !important;
+  margin-left: auto;
+  display: flex;
+  gap: 4px;
+  padding: 0 !important;
+}
+
+.upgram-other-products-add span {
+  display: none;
+}
+
+#upgram-coupon-button {
+  font-weight: 600;
+  font-size: 18px;
+  color: #2161df;
+  padding: 0;
+  border: none;
+  margin: 12px 0;
+  margin-right: auto;
+  text-decoration: none;
+  background: none;
+  box-shadow: none;
+}
+
+#upgram-coupon-button:hover {
+  background: none;
+}
+
+.modal-content {
+  padding: 20px;
+  max-width: 100%;
+}
+
+.form-check {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+#modal-container .form-check-input {
+  width: 20px;
+  height: 20px;
+}
+
+.form-check label {
+  transform: translateY(5%);
+}
+
+#instagram-user-form {
+  margin-block-end: 0;
+}
+
+#couponForm > div {
+  display: grid;
+  grid-template-columns: 328fr 224fr;
+  position: relative;
+}
+
+#couponForm input {
+  border-radius: 5px 0 0 5px;
+  padding-left: 46px;
+}
+
+#couponForm button {
+  width: 100%;
+  height: 56px;
+  border-radius: 0 5px 5px 0;
+  border: none;
+  background: #2161df;
+  color: white;
+  font-weight: 600;
+}
+
+#couponMessage {
+  color: #2161df;
+  margin-top: 12px;
+  font-family: "Poppins", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 22px;
+}
+
+#couponMessage span {
+  display: block;
+  font-family: "Poppins", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 22px;
+  color: #4bb639;
+}
+
+#initialModal label {
+  color: var(--upgram-checkout-text-color, initial);
+}
+
+#initialModal .save-info-label {
+  font-family: "Poppins", sans-serif;
+  font-size: 16px !important;
+  font-weight: 300 !important;
+  line-height: 22px !important;
+}
+
+#pix-qr-container {
+  border-radius: 12px;
+  border: 1px solid #c9d5f7;
+}
+
+.upgram-product-box {
+  background: white;
+  padding: 24px 16px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 100%;
+  box-shadow: 0px 4px 21px 0px #00000014;
+}
+
+.upgram-dropdown-text {
+  flex: 1;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 4px;
+}
+
+.upgram-dropdown-text #seguidoresText {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+#seguidoresMenu .dropdown-item {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@media (min-width: 768px) {
+  .containers {
+    padding: 24px;
+  }
+
+  .upgram-product-box {
+    width: 642px;
+    padding: 50px 32px;
+  }
+
+  .upgram-product-title {
+    font-size: 24px;
+    line-height: 30px;
+  }
+
+  .text-stars {
+    font-size: 20px;
+  }
+
+  .modal-content {
+    padding: 40px;
+  }
+
+  .upgram-root .upgram-other-products-add {
+    width: 126px;
+  }
+
+  .upgram-other-products-add span {
+    display: inline;
+  }
+
+  #initialModal #product-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+}

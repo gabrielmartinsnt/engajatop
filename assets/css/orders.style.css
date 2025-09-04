@@ -1,0 +1,233 @@
+.upgram-orders-container {
+  padding: 10px 0;
+  border-radius: 4px;
+  box-shadow: 1.5px 4px 16px 0px #77777729;
+  background-color: white;
+  max-width: 1210px;
+  --wp--style--global--content-size: 1210px;
+
+  table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  @media (min-width: 768px) {
+    table {
+      display: table;
+    }
+
+    padding: 24px 24px;
+  }
+}
+.upgram-orders-container .upgram-orders-title {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 27.5px;
+  margin-left: 8px;
+  margin-bottom: 0;
+}
+.upgram-orders-container .upgram-orders-btn,
+.upgram-orders-header .upgram-orders-btn {
+  all: unset;
+  box-sizing: border-box;
+  display: inline-block;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif !important;
+  background: linear-gradient(92.18deg, #2161df 0%, #db265c 115.88%);
+  height: 40px;
+  padding: 8px 20px;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: 600;
+  line-height: 24px;
+  text-decoration: none;
+  color: white;
+}
+.upgram-orders-btn:hover {
+  color: #fbfbfd;
+}
+.upgram-orders-container * {
+  font-family: "Poppins", sans-serif !important;
+}
+
+.upgram-orders-table-container {
+  position: relative;
+  width: 100%;
+  overflow: auto;
+}
+
+.upgram-orders-table-container table {
+  width: 100%;
+}
+
+.upgram-orders-container thead {
+  background: #fbfbfd;
+}
+.upgram-orders-container tr th {
+  color: #515063;
+  font-weight: 500;
+  font-size: 14px;
+
+  @media (min-width: 768px) {
+    font-size: 16px;
+  }
+}
+.upgram-orders-container tr td {
+  font-size: 12px;
+  padding: 16px 8px;
+
+  @media (min-width: 768px) {
+    font-size: 16px;
+    padding: 20px 8px;
+  }
+}
+.upgram-orders-container tr td:first-child {
+  padding-left: 10px;
+
+  @media (min-width: 768px) {
+    padding-left: 24px;
+  }
+}
+.upgram-orders-container tr th:first-child {
+  padding-left: 10px;
+
+  @media (min-width: 768px) {
+    padding-left: 24px;
+  }
+}
+.wp-block-spacer,
+.wp-block-post-title,
+.entry-header {
+  display: none;
+}
+
+/* Estilos para o overlay do modal */
+.upgram-orders-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Estilos para o conteúdo do modal */
+.upgram-orders-modal-content {
+  width: 100%;
+  max-width: 428px; /* equivalente a max-w-md */
+  padding: 25px 20px;
+  margin: 0 auto;
+  background-color: #ffffff; /* equivalente a bg-white */
+  border-radius: 0.375rem; /* equivalente a rounded */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05); /* equivalente a shadow-lg */
+}
+
+.upgram-orders-modal-content * {
+  font-family: "Montserrat", sans-serif !important;
+}
+
+.upgram-orders-modal-content .upgram-orders-modal-link {
+  color: #7c51f3;
+  text-decoration: underline;
+}
+
+.upgram-orders-modal-content p {
+  margin-bottom: 0;
+  font-size: 14px;
+  line-height: 18.2px;
+}
+
+.upgram-orders-modal-content p:has(.upgram-orders-modal-link) {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Estilo do título */
+.upgram-orders-modal-title {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 44.8px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.upgram-orders-modal-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.upgram-orders-modal-item {
+  border-radius: 7px;
+  border: 1px solid #cad3f5;
+  padding: 8px 15px;
+}
+
+.upgram-orders-button {
+  --upgram-color-primary: #7c51f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  height: 50px;
+  padding: 0 15px;
+  border-radius: 7px;
+  border: 1px solid #2b2e4a33;
+  color: var(--upgram-color-primary);
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 14px;
+
+  &:disabled,
+  &[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &[data-variant="primary"] {
+    border: 1px solid #2b2e4a33;
+    background-color: var(--upgram-color-primary);
+    color: white;
+  }
+
+  &[data-variant="secondary"] {
+    background-color: #f05161;
+    color: white;
+  }
+
+  &[data-variant="danger"] {
+    background-color: #eb2254;
+    color: white;
+  }
+}
+
+.upram-orders-detail-btn-mobile {
+  all: unset;
+  border: 1.7px solid #2161df;
+  border-radius: 7px;
+  width: 20px;
+  height: 20px;
+  color: #2161df;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.upgram-spin-animation {
+  animation: spin 2s linear infinite;
+  transform-origin: center;
+}
