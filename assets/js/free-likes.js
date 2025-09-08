@@ -10,6 +10,7 @@ jQuery(document).ready(function ($) {
         },
         success: function (html) {
           $("#modal-container").html(html).modal("show");
+          if (window.sanitizeDashesIn) sanitizeDashesIn(document.getElementById("modal-container"));
           resolve();
         },
         error: function (response) {
