@@ -46,6 +46,29 @@ jQuery(document).ready(function ($) {
     return String(name || '').replace(/\s*[-–—]+\s*/g, ' ').replace(/\s{2,}/g, ' ').trim();
   }
   
+  function sanitizeDashesIn(containerEl) {
+    if (!containerEl) return;
+    const walker = document.createTreeWalker(containerEl, NodeFilter.SHOW_TEXT, null, false);
+    const dashSeq = /\s*[-–—]{2,}\s*/g;
+    const toKeepSingle = /(^|\s)-(\s|$)/g;
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    for (const node of nodes) {
+      const original = node.nodeValue;
+      let cleaned = original.replace(dashSeq, " ").replace(/\s{2,}/g, " ");
+      cleaned = cleaned.replace(toKeepSingle, "$1-$2");
+      if (cleaned !== original) node.nodeValue = cleaned.trim();
+    }
+  }
+  
+  function setupModalSanitizer() {
+    const el = document.getElementById("modal-container");
+    if (!el) return;
+    sanitizeDashesIn(el);
+    const observer = new MutationObserver(() => sanitizeDashesIn(el));
+    observer.observe(el, { childList: true, subtree: true });
+  }
+  
   function formatPackageDropdown() {
     jQuery('#seguidoresMenu .dropdown-item').each(function () {
       const $a = jQuery(this);
@@ -58,7 +81,10 @@ jQuery(document).ready(function ($) {
     });
   }
   
-  jQuery(function(){ formatPackageDropdown(); });
+  jQuery(function(){ 
+    formatPackageDropdown(); 
+    setupModalSanitizer();
+  });
 
   const licenseKeyPromise = checkLicenseKey();
 
@@ -112,6 +138,7 @@ jQuery(document).ready(function ($) {
         variation_id: variationId,
       });
       $("#modal-container").html(html).modal("show");
+      sanitizeDashesIn(document.getElementById("modal-container"));
     });
   });
 
@@ -146,6 +173,7 @@ jQuery(document).ready(function ($) {
       $("#modal-container").find("#initialModal").hide();
       $("#modal-container").find("#instagram-form").show(); // undo hide if not skip before
       $("#modal-container").append(html);
+      sanitizeDashesIn(document.getElementById("modal-container"));
 
       // HANDLE CPF VISIBILITY
       if (
@@ -248,6 +276,7 @@ jQuery(document).ready(function ($) {
           if (json.success) {
             $("#modal-container").find("#selectPostsModal")?.remove();
             $("#modal-container").append(json.data.html);
+            sanitizeDashesIn(document.getElementById("modal-container"));
 
             // HANDLE CPF VISIBILITY
             if (
@@ -358,6 +387,7 @@ jQuery(document).ready(function ($) {
         if (json.success) {
           if (json.data.html) {
             $("#modal-container").html(json.data.html);
+            sanitizeDashesIn(document.getElementById("modal-container"));
           } else {
             window.location.href = json.data.redirect_url;
           }
@@ -521,6 +551,7 @@ function loadSuccessModal(orderId) {
     success: function (response) {
       if (response.success) {
         $("#modal-container").html(response.data.html).modal("show");
+        sanitizeDashesIn(document.getElementById("modal-container"));
       }
     },
   });
