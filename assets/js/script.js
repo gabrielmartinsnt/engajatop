@@ -23,6 +23,43 @@ jQuery(document).ready(function ($) {
     `
   );
 
+  const currencyBRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+  
+  function toNumber(v) {
+    if (v == null) return 0;
+    if (typeof v === 'number') return v;
+    const s = String(v).replace(/[^\d,.-]/g, '').replace(/\.(?=\d{3}(?!\d))/g, '').replace(',', '.');
+    const n = parseFloat(s);
+    return isNaN(n) ? 0 : n;
+  }
+  
+  function computePriceMeta(item) {
+    const regular = toNumber(item?.regular_price ?? item?.regularPrice ?? item?.regular ?? item?.price);
+    const sale = item?.sale_price ?? item?.salePrice;
+    const hasSale = sale != null && toNumber(sale) > 0 && toNumber(sale) < regular;
+    const current = hasSale ? toNumber(sale) : regular;
+    const pct = hasSale && regular > 0 ? Math.round((1 - current / regular) * 100) : 0;
+    return { regular, current, discountPct: pct };
+  }
+  
+  function cleanName(name) {
+    return String(name || '').replace(/\s*[-–—]+\s*/g, ' ').replace(/\s{2,}/g, ' ').trim();
+  }
+  
+  function formatPackageDropdown() {
+    jQuery('#seguidoresMenu .dropdown-item').each(function () {
+      const $a = jQuery(this);
+      const item = $a.data('item') || {};
+      const { current, discountPct } = computePriceMeta(item);
+      const name = cleanName(item.name);
+      const priceHtml = `<span class="opt-price price-accent">${currencyBRL.format(current)}</span>` +
+                        (discountPct > 0 ? ` <span class="discount-percent">-${discountPct}%</span>` : '');
+      $a.html(`<span class="opt-name">${name}</span>${priceHtml}`);
+    });
+  }
+  
+  jQuery(function(){ formatPackageDropdown(); });
+
   const licenseKeyPromise = checkLicenseKey();
 
   function ajax(data) {
@@ -264,12 +301,11 @@ jQuery(document).ready(function ($) {
     .click(function (e) {
       e.preventDefault();
       const item = $(this).data("item");
+      const { current, discountPct } = computePriceMeta(item);
+      const name = cleanName(item.name);
       $("#seguidoresText").html(
-        item.name +
-          `<span class="purple"> ${Number(item.price).toLocaleString([], {
-            style: "currency",
-            currency: "BRL",
-          })}</span>`
+        `${name} <span class="price-accent"> ${currencyBRL.format(current)}</span>` +
+        (discountPct > 0 ? ` <span class="discount-percent">-${discountPct}%</span>` : '')
       );
       $("#productId").val(item.product_id);
       $("#variationId").val(item.variation_id);
