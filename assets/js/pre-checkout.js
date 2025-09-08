@@ -11,7 +11,8 @@
           
           $btn.off('click').on('click', function(e){
             e.preventDefault();
-            window.location.href = '/checkout/';
+            const checkoutUrl = window.wc_checkout_params?.checkout_url || '/checkout/';
+            window.location.href = checkoutUrl;
           });
         }
       });
