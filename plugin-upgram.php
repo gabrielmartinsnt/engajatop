@@ -27,7 +27,6 @@ require_once UPGRAM_PATH . 'includes/downloader.php';
 require_once UPGRAM_PATH . 'includes/free-followers.php';
 require_once UPGRAM_PATH . 'includes/free-views.php';
 require_once UPGRAM_PATH . 'includes/free-likes.php';
-require_once UPGRAM_PATH . 'includes/express-checkout.php';
 require_once UPGRAM_PATH . 'public/shortcodes.php';
 
 function upgram_scripts()

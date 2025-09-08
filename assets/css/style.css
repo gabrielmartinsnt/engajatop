@@ -914,8 +914,6 @@ body.modal-open .modal {
 #upgram-express-checkout { margin-bottom: 20px; padding: 16px; border: 1px solid #e5e5e5; border-radius: 8px; background: #f9f9f9; }
 #upgram-express-checkout .express-title { font-weight: 700; margin-bottom: 4px; font-size: 16px; }
 #upgram-express-checkout .express-subtitle { color: #666; font-size: 14px; margin-bottom: 12px; }
-#upgram-express-checkout .express-providers { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; min-height: 44px; }
-#upgram-express-checkout .express-slot { min-width: 220px; min-height: 44px; display:flex; align-items:center; justify-content:center; background: #fff; border: 1px solid #ddd; border-radius: 4px; }
 #upgram-express-checkout .express-divider { display:flex; align-items:center; gap:8px; color:#999; margin: 16px 0; }
 #upgram-express-checkout .express-divider::before,
 #upgram-express-checkout .express-divider::after { content:''; flex:1; height:1px; background:#e5e5e5; }
@@ -935,4 +933,9 @@ body.modal-open .modal {
 }
 #upgram-express-checkout .standard-checkout-btn:hover { 
   background: #5a359a; 
+}
+#upgram-express-checkout .standard-note { 
+  color: #666; 
+  font-size: 12px; 
+  margin-top: 8px; 
 }
