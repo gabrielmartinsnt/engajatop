@@ -841,9 +841,35 @@ body.modal-open .modal {
 }
 
 #seguidoresMenu .dropdown-item {
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   white-space: nowrap;
+  overflow: hidden;
+}
+
+#seguidoresMenu .dropdown-item .opt-name {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
   text-overflow: ellipsis;
+}
+
+#seguidoresMenu .dropdown-item .opt-price {
+  margin-left: 12px;
+  flex-shrink: 0;
+}
+
+.price-accent { 
+  color: #c36; 
+  font-weight: 700; 
+}
+
+.discount-percent { 
+  margin-left: 6px; 
+  font-weight: 700; 
+  color: #4bb639; 
 }
 
 @media (min-width: 768px) {
