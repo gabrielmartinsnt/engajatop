@@ -909,3 +909,13 @@ body.modal-open .modal {
     gap: 12px;
   }
 }
+
+/* Express checkout section */
+#upgram-express-checkout { margin-bottom: 16px; }
+#upgram-express-checkout .express-title { font-weight: 700; margin-bottom: 8px; }
+#upgram-express-checkout .express-providers { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+#upgram-express-checkout .express-slot { min-width: 220px; min-height: 44px; display:flex; align-items:center; justify-content:center; }
+#upgram-express-checkout .express-divider { display:flex; align-items:center; gap:8px; color:#999; margin-top: 12px; }
+#upgram-express-checkout .express-divider::before,
+#upgram-express-checkout .express-divider::after { content:''; flex:1; height:1px; background:#e5e5e5; }
+#upgram-express-checkout .express-divider span { white-space:nowrap; }
