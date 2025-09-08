@@ -28,22 +28,16 @@
   
   function hideUnavailableMethods(modal){
     const keywords = [/apple\s*pay/i, /google\s*pay/i, /amazon\s*pay/i];
-    $(modal).find('input[type="radio"]').each(function(){
+    $(modal).find('input[type="radio"][name*="payment"], input[type="radio"][id*="payment"]').each(function(){
       const $input = $(this);
       const id = $input.attr('id');
       let $label = id ? $(modal).find(`label[for="${id}"]`) : $input.closest('label');
       const txt = ($label.text() || '').trim();
       if (keywords.some(rx => rx.test(txt))) {
-        const $block = $input.closest('.form-check, .payment-method, .upgram-payment-option, li, .row, div');
-        if ($block.length) $block.remove();
-        else $input.remove();
-      }
-    });
-    $(modal).find('.payment-method, .form-check, .upgram-payment-option, li, div, label').each(function(){
-      const txt = ($(this).text() || '').trim();
-      if (keywords.some(rx => rx.test(txt))) {
-        const $block = $(this).closest('.form-check, .payment-method, .upgram-payment-option, li, .row, div');
-        if ($block.length) $block.remove();
+        const $paymentOption = $input.closest('.payment-method, .form-check');
+        if ($paymentOption.length && $paymentOption.find('input[type="radio"]').length === 1) {
+          $paymentOption.hide(); // Hide instead of remove to avoid breaking references
+        }
       }
     });
   }
@@ -55,15 +49,34 @@
   function onPaymentModalReady(root){
     const modal = getPaymentModal(root);
     if (!modal) return;
-    ensureExpressSection(modal);
-    hideUnavailableMethods(modal);
+    
+    if ($(modal).find('#paymentModal').length || $(modal).attr('id') === 'paymentModal') {
+      ensureExpressSection(modal);
+      setTimeout(() => hideUnavailableMethods(modal), 100);
+    }
   }
   
   function watchModal(){
     const el = document.getElementById('modal-container');
     if (!el) return;
+    
     onPaymentModalReady(el);
-    const mo = new MutationObserver(() => onPaymentModalReady(el));
+    
+    const mo = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+          const hasModal = Array.from(mutation.addedNodes).some(node => 
+            node.nodeType === 1 && (
+              node.id === 'paymentModal' || 
+              node.querySelector && node.querySelector('#paymentModal')
+            )
+          );
+          if (hasModal) {
+            setTimeout(() => onPaymentModalReady(el), 50);
+          }
+        }
+      });
+    });
     mo.observe(el, { childList: true, subtree: true });
   }
   
