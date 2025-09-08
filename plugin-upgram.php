@@ -40,8 +40,8 @@ function upgram_scripts()
     wp_enqueue_script('bootstrap-js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js', array('jquery'), '5.0.2', ['strategy' => 'defer']);
     wp_enqueue_script('upgram-script', plugins_url('assets/js/script.js', __FILE__), array('jquery'), UPGRAM_VERSION, ['strategy' => 'defer', 'in_footer' => true]);
     wp_enqueue_script(
-        'upgram-express-checkout',
-        plugins_url('assets/js/express-checkout.js', __FILE__),
+        'upgram-pre-checkout',
+        plugins_url('assets/js/pre-checkout.js', __FILE__),
         array('jquery', 'upgram-script'),
         UPGRAM_VERSION,
         ['strategy' => 'defer', 'in_footer' => true]
