@@ -50,22 +50,43 @@ jQuery(document).ready(function ($) {
     if (!containerEl) return;
     const walker = document.createTreeWalker(containerEl, NodeFilter.SHOW_TEXT, null, false);
     const dashSeq = /\s*[-–—]{2,}\s*/g;
-    const toKeepSingle = /(^|\s)-(\s|$)/g;
     const nodes = [];
     while (walker.nextNode()) nodes.push(walker.currentNode);
     for (const node of nodes) {
       const original = node.nodeValue;
-      let cleaned = original.replace(dashSeq, " ").replace(/\s{2,}/g, " ");
-      cleaned = cleaned.replace(toKeepSingle, "$1-$2");
+      let cleaned = original
+        .replace(dashSeq, " ")
+        .replace(/\s{2,}/g, " ")
+        .replace(/(\s)[-–—](?=\s)/g, "$1");
       if (cleaned !== original) node.nodeValue = cleaned.trim();
     }
   }
   
+  function fixValorTotalSeparators(root) {
+    try {
+      const $root = jQuery(root || document);
+      $root.find('*:contains("Valor total")').each(function(){
+        const el = this;
+        const prev = el.previousSibling;
+        if (prev && prev.nodeType === 3) {
+          prev.nodeValue = prev.nodeValue.replace(/\s*[-–—]\s*$/, ' ');
+        }
+        if (el.firstChild && el.firstChild.nodeType === 3) {
+          el.firstChild.nodeValue = el.firstChild.nodeValue.replace(/^[-–—]\s*/, '');
+        }
+      });
+    } catch(e){ console.warn('fixValorTotalSeparators error', e); }
+  }
+
   function setupModalSanitizer() {
     const el = document.getElementById("modal-container");
     if (!el) return;
     sanitizeDashesIn(el);
-    const observer = new MutationObserver(() => sanitizeDashesIn(el));
+    fixValorTotalSeparators(el);
+    const observer = new MutationObserver(() => {
+      sanitizeDashesIn(el);
+      fixValorTotalSeparators(el);
+    });
     observer.observe(el, { childList: true, subtree: true });
   }
   
@@ -81,9 +102,57 @@ jQuery(document).ready(function ($) {
     });
   }
   
-  jQuery(function(){ 
-    formatPackageDropdown(); 
+  function findUsernameInput() {
+    const $form = jQuery('#instagram-form');
+    if (!$form.length) return null;
+    const $input = $form.find('input[name="username"], input[name="instagram"], input[name="handle"], input[type="text"]').first();
+    return $input.length ? $input : null;
+  }
+  
+  function ensureProfilePreviewContainer() {
+    const $form = jQuery('#instagram-form');
+    if (!$form.length) return null;
+    let $box = $form.find('#upgram-profile-preview');
+    if (!$box.length) {
+      $box = jQuery('<div id="upgram-profile-preview" style="margin-top:10px;"></div>');
+      $form.append($box);
+    }
+    return $box;
+  }
+  
+  function renderProfilePreview(username) {
+    const $box = ensureProfilePreviewContainer();
+    if (!$box) return;
+    if (!username) { $box.empty(); return; }
+    const uname = username.replace(/^@/, '').trim();
+    if (!uname) { $box.empty(); return; }
+    const avatar = `https://unavatar.io/instagram/${encodeURIComponent(uname)}`;
+    $box.html(
+      `<div class="d-flex align-items-center gap-2">
+         <img src="${avatar}" alt="@${uname}" style="width:36px;height:36px;border-radius:50%;object-fit:cover" onerror="this.style.display='none'">
+         <div>
+           <div style="font-weight:600;">@${uname}</div>
+           <a href="https://instagram.com/${encodeURIComponent(uname)}" target="_blank" rel="noopener">Abrir perfil</a>
+         </div>
+       </div>`
+    );
+  }
+  
+  function bindProfilePreview(){
+    try {
+      const $input = findUsernameInput();
+      if (!$input) return;
+      $input.on('input blur', function(){
+        renderProfilePreview(this.value);
+      });
+      renderProfilePreview($input.val());
+    } catch(e){ console.warn('bindProfilePreview error', e); }
+  }
+
+  jQuery(function () {
+    formatPackageDropdown();
     setupModalSanitizer();
+    bindProfilePreview();
   });
 
   const licenseKeyPromise = checkLicenseKey();
@@ -139,6 +208,7 @@ jQuery(document).ready(function ($) {
       });
       $("#modal-container").html(html).modal("show");
       sanitizeDashesIn(document.getElementById("modal-container"));
+      fixValorTotalSeparators(document.getElementById("modal-container"));
     });
   });
 
@@ -169,25 +239,9 @@ jQuery(document).ready(function ($) {
         ...data,
       });
 
-      $("#modal-container").find("#instructions")?.hide();
-      $("#modal-container").find("#initialModal").hide();
-      $("#modal-container").find("#instagram-form").show(); // undo hide if not skip before
-      $("#modal-container").append(html);
-      sanitizeDashesIn(document.getElementById("modal-container"));
-
-      // HANDLE CPF VISIBILITY
-      if (
-        $('input[name="payment_method"][value="paghiper_pix"]').is(":checked")
-      ) {
-        $("#upgram-cpf").removeClass("d-none");
-      }
-      $('input[name="payment_method"]').change(function () {
-        if ($(this).val() === "paghiper_pix" && $(this).is(":checked")) {
-          $("#upgram-cpf").removeClass("d-none");
-        } else {
-          $("#upgram-cpf").addClass("d-none");
-        }
-      });
+      const checkoutUrl = window.wc_checkout_params?.checkout_url || '/checkout/';
+      window.location.href = checkoutUrl;
+      return;
     } finally {
       $("[id^='continue-button-icon']").show();
       $("[id^='continue-button-spinner']").hide();
@@ -277,6 +331,7 @@ jQuery(document).ready(function ($) {
             $("#modal-container").find("#selectPostsModal")?.remove();
             $("#modal-container").append(json.data.html);
             sanitizeDashesIn(document.getElementById("modal-container"));
+            fixValorTotalSeparators(document.getElementById("modal-container"));
 
             // HANDLE CPF VISIBILITY
             if (
@@ -388,6 +443,7 @@ jQuery(document).ready(function ($) {
           if (json.data.html) {
             $("#modal-container").html(json.data.html);
             sanitizeDashesIn(document.getElementById("modal-container"));
+            fixValorTotalSeparators(document.getElementById("modal-container"));
           } else {
             window.location.href = json.data.redirect_url;
           }
@@ -552,6 +608,7 @@ function loadSuccessModal(orderId) {
       if (response.success) {
         $("#modal-container").html(response.data.html).modal("show");
         sanitizeDashesIn(document.getElementById("modal-container"));
+        fixValorTotalSeparators(document.getElementById("modal-container"));
       }
     },
   });
