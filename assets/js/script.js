@@ -96,8 +96,15 @@ jQuery(document).ready(function ($) {
     const $modal = $root.find('#paymentModal').length ? $root.find('#paymentModal') : $root.find('.modal.show');
     if (!$modal.length || $modal.data('upgramAdjusted')) return;
 
-    $modal.find('#upgram-payment-method').css('display','none');
-    $modal.find('#upgram-cpf').addClass('d-none');
+    $modal.find('#upgram-payment-method, .wc_payment_methods, .payment_methods').hide();
+    $modal.find('input[name="payment_method"]')
+      .prop('checked', false)
+      .off('.upgramCpf');
+    $modal.find('input[name="payment_method"]').closest('.form-check, .payment-method, li, div, section').hide();
+
+    $modal.find('#upgram-cpf').addClass('d-none').hide();
+
+    setTimeout(() => { $modal.find('#upgram-cpf').addClass('d-none').hide(); }, 0);
 
     const selected = (window.flowCache?.get && flowCache.get('selectedPrice')) || window._upgramSelectedPrice;
     if (selected != null) {
@@ -106,12 +113,14 @@ jQuery(document).ready(function ($) {
     }
 
     let $cta = $modal.find('button:contains("Realizar pagamento")').first();
-    if (!$cta.length) {
-      $cta = $modal.find('button.btn, button').last();
-    }
+    if (!$cta.length) $cta = $modal.find('button.btn, button').last();
+
     if ($cta.length) {
-      $cta.text('Última Etapa');
-      $cta.addClass('btn-continue');
+      $cta
+        .attr('id', 'continue-button')
+        .text('Última Etapa')
+        .addClass('btn-continue btn-gradient')
+        .css({ color: '#fff', fontWeight: '700' });
       $cta.off('click.upgramLastStep').on('click.upgramLastStep', function(e){
         try {
           e.preventDefault();
@@ -326,21 +335,21 @@ jQuery(document).ready(function ($) {
             fixValorTotalSeparators(document.getElementById("modal-container"));
             adjustPaymentModalUI(document.getElementById("modal-container"));
 
-            // HANDLE CPF VISIBILITY
-            if (
-              $('input[name="payment_method"][value="paghiper_pix"]').is(
-                ":checked"
-              )
-            ) {
-              $("#upgram-cpf").removeClass("d-none");
-            }
-            $('input[name="payment_method"]').change(function () {
-              if ($(this).val() === "paghiper_pix" && $(this).is(":checked")) {
+            // HANDLE CPF VISIBILITY (disabled in pre-checkout flow)
+            if ($('#paymentModal').length && $('#paymentModal').is(':visible')) {
+              $('#upgram-cpf').addClass('d-none').hide();
+            } else {
+              if ($('input[name="payment_method"][value="paghiper_pix"]').is(":checked")) {
                 $("#upgram-cpf").removeClass("d-none");
-              } else {
-                $("#upgram-cpf").addClass("d-none");
               }
-            });
+              $('input[name="payment_method"]').off('.upgramCpf').on('change.upgramCpf', function () {
+                if ($(this).val() === "paghiper_pix" && $(this).is(":checked")) {
+                  $("#upgram-cpf").removeClass("d-none");
+                } else {
+                  $("#upgram-cpf").addClass("d-none");
+                }
+              });
+            }
           } else {
             displayErrorToast(json.data.message);
           }
