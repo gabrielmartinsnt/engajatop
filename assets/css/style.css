@@ -918,3 +918,7 @@ body.modal-open .modal {
   padding: 12px;
   margin: 16px 0;
 }
+
+#upgram-profile-preview { 
+  padding-top: 8px; 
+}
