@@ -103,19 +103,31 @@ jQuery(document).ready(function ($) {
   }
   
   function findUsernameInput() {
-    const $form = jQuery('#instagram-form');
-    if (!$form.length) return null;
-    const $input = $form.find('input[name="username"], input[name="instagram"], input[name="handle"], input[type="text"]').first();
-    return $input.length ? $input : null;
+    let $input = jQuery('input[name="username"]');
+    if (!$input.length) $input = jQuery('input[name="instagram"]');
+    if (!$input.length) $input = jQuery('input[name="handle"]');
+    if (!$input.length) $input = jQuery('#instagram-form input[type="text"]');
+    if (!$input.length) $input = jQuery('input[placeholder*="@"], input[placeholder*="instagram"], input[placeholder*="usuário"]');
+    if (!$input.length) $input = jQuery('input[type="text"]').filter(function() {
+      const label = jQuery(this).closest('.form-group, .input-group, .field').find('label').text().toLowerCase();
+      return label.includes('instagram') || label.includes('usuário') || label.includes('@');
+    });
+    return $input.length ? $input.first() : null;
   }
   
   function ensureProfilePreviewContainer() {
-    const $form = jQuery('#instagram-form');
-    if (!$form.length) return null;
-    let $box = $form.find('#upgram-profile-preview');
+    const $input = findUsernameInput();
+    if (!$input) return null;
+    
+    let $box = jQuery('#upgram-profile-preview');
     if (!$box.length) {
       $box = jQuery('<div id="upgram-profile-preview" style="margin-top:10px;"></div>');
-      $form.append($box);
+      const $container = $input.closest('.form-group, .input-group, .field, .form-control, div');
+      if ($container.length) {
+        $container.after($box);
+      } else {
+        $input.after($box);
+      }
     }
     return $box;
   }
@@ -140,12 +152,34 @@ jQuery(document).ready(function ($) {
   
   function bindProfilePreview(){
     try {
-      const $input = findUsernameInput();
-      if (!$input) return;
-      $input.on('input blur', function(){
-        renderProfilePreview(this.value);
+      function tryBind() {
+        const $input = findUsernameInput();
+        if (!$input) return false;
+        
+        if ($input.data('upgram-preview-bound')) return true;
+        
+        $input.on('input blur keyup', function(){
+          renderProfilePreview(this.value);
+        });
+        renderProfilePreview($input.val());
+        $input.data('upgram-preview-bound', true);
+        console.log('Instagram profile preview bound to input:', $input[0]);
+        return true;
+      }
+      
+      if (tryBind()) return;
+      
+      const observer = new MutationObserver(() => {
+        if (tryBind()) {
+          observer.disconnect();
+        }
       });
-      renderProfilePreview($input.val());
+      
+      const container = document.getElementById('modal-container') || document.body;
+      observer.observe(container, { childList: true, subtree: true });
+      
+      setTimeout(() => observer.disconnect(), 10000);
+      
     } catch(e){ console.warn('bindProfilePreview error', e); }
   }
 
@@ -239,7 +273,7 @@ jQuery(document).ready(function ($) {
         ...data,
       });
 
-      const checkoutUrl = window.wc_checkout_params?.checkout_url || '/checkout/';
+      const checkoutUrl = 'https://engajatop.com/finalizar-compra/';
       window.location.href = checkoutUrl;
       return;
     } finally {
