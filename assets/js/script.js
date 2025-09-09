@@ -107,9 +107,13 @@ jQuery(document).ready(function ($) {
     setTimeout(() => { $modal.find('#upgram-cpf').addClass('d-none').hide(); }, 0);
 
     const selected = (window.flowCache?.get && flowCache.get('selectedPrice')) || window._upgramSelectedPrice;
-    if (selected != null) {
-      const el = $modal.find('#totalValue')[0];
-      if (el) el.innerText = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(selected);
+    const el = $modal.find('#totalValue')[0];
+    if (el) {
+      if (window._upgramCoupon?.applied && typeof window._upgramCoupon.discountedTotal !== 'undefined') {
+        el.innerText = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(window._upgramCoupon.discountedTotal);
+      } else if (selected != null) {
+        el.innerText = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(selected);
+      }
     }
 
     let $cta = $modal.find('button:contains("Realizar pagamento")').first();
@@ -128,13 +132,8 @@ jQuery(document).ready(function ($) {
           const email = jQuery('.upgram-input input[name="email"]').val() || '';
           const phone = jQuery('.upgram-input input[name="phone"]').val() || '';
           localStorage.setItem('upgram_contact', JSON.stringify({ email, phone, ts: Date.now() }));
-          
-          processPayment(function(error) {
-            console.warn('Payment processing error:', error);
-            window.location.href = 'https://engajatop.com/finalizar-compra/';
-          });
+          ensureCartThenCheckout('https://engajatop.com/finalizar-compra/');
         } catch(err){ 
-          console.warn('Button click error:', err);
           window.location.href = 'https://engajatop.com/finalizar-compra/'; 
         }
       });
@@ -188,6 +187,40 @@ jQuery(document).ready(function ($) {
         },
       });
     });
+  }
+
+  function ensureCartThenCheckout(nextUrl) {
+    try {
+      let data = {};
+      try {
+        const fd = window.flowCache?.get && flowCache.get('startFormData');
+        if (fd) data = Object.fromEntries(fd.entries ? fd.entries() : fd);
+      } catch(e){}
+
+      const pid = jQuery('#productId').val() || jQuery('[name="product_id"]').val() || jQuery('[name="productId"]').val();
+      const vid = jQuery('#variationId').val() || jQuery('[name="variation_id"]').val() || jQuery('[name="variationId"]').val();
+      if (pid) { data.product_id = pid; data.productId = pid; }
+      if (vid) { data.variation_id = vid; data.variationId = vid; }
+
+      data.action = 'submit_to_cart';
+      data.security = (window.ajax_object && ajax_object.security) || data.security;
+
+      jQuery.ajax({
+        url: ajax_object.ajax_url,
+        type: 'POST',
+        dataType: 'json',
+        data,
+        complete: function() {
+          window.location.href = nextUrl || 'https://engajatop.com/finalizar-compra/';
+        },
+        error: function() {
+          window.location.href = nextUrl || 'https://engajatop.com/finalizar-compra/';
+        },
+        success: function() { }
+      });
+    } catch(e) {
+      window.location.href = nextUrl || 'https://engajatop.com/finalizar-compra/';
+    }
   }
 
   $(document).on("click", "a", function (e) {
@@ -515,17 +548,21 @@ jQuery(document).ready(function ($) {
         success: function (response) {
           if (response.success) {
             $("#upgram-coupon-placeholder").text(couponCode.toUpperCase());
-            // Atualiza o valor total no frontend
-            document.getElementById("totalValue").innerText =
-              "R$" + response.data.discounted_total;
-            // Exibe a mensagem de sucesso
+
+            const discounted = toNumber(response.data.discounted_total);
+            const discountAmount = toNumber(response.data.discount_amount);
+            window._upgramCoupon = { applied: true, discountedTotal: discounted, discountAmount };
+
+            const el = document.getElementById("totalValue");
+            if (el && !Number.isNaN(discounted)) {
+              el.innerText = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(discounted);
+            }
+
             document.getElementById("couponMessage").innerHTML =
               "Cupom aplicado com sucesso, seu desconto foi de " +
-              `<span>- R$ ${response.data.discount_amount}</span>`;
+              `<span>- ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(discountAmount)}</span>`;
           } else {
-            // Exibe a mensagem de erro
-            document.getElementById("couponMessage").innerText =
-              response.data.message;
+            document.getElementById("couponMessage").innerText = response.data.message;
           }
         },
         error: function (xhr, status, error) {
