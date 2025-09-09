@@ -96,8 +96,14 @@ jQuery(document).ready(function ($) {
     const $modal = $root.find('#paymentModal').length ? $root.find('#paymentModal') : $root.find('.modal.show');
     if (!$modal.length || $modal.data('upgramAdjusted')) return;
 
-    $modal.find('#upgram-payment-method').css('display','none');
+    $modal.find('#upgram-payment-method').hide();
+    $modal.find('[id*="payment"], [class*="payment"]').hide();
+    $modal.find('input[name="payment_method"]').closest('.form-check, .payment-method, div, section').hide();
     $modal.find('#upgram-cpf').addClass('d-none');
+    
+    $modal.find('*').filter(function() {
+      return jQuery(this).text().match(/meio.*pagamento|payment.*method/i);
+    }).hide();
 
     const selected = (window.flowCache?.get && flowCache.get('selectedPrice')) || window._upgramSelectedPrice;
     if (selected != null) {
@@ -110,8 +116,13 @@ jQuery(document).ready(function ($) {
       $cta = $modal.find('button.btn, button').last();
     }
     if ($cta.length) {
-      $cta.text('Última Etapa');
-      $cta.addClass('btn-continue');
+      $cta.html('');
+      $cta.addClass('btn-continue btn-gradient');
+      $cta.css({
+        'font-weight': 'bold',
+        'background': 'linear-gradient(90deg, #7c51f3 0%, #e91e63 100%)',
+        'border': 'none'
+      });
       $cta.off('click.upgramLastStep').on('click.upgramLastStep', function(e){
         try {
           e.preventDefault();

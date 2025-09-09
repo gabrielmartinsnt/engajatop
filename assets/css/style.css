@@ -227,13 +227,19 @@ body.modal-open .modal {
   flex-shrink: 0;
   align-self: stretch;
   border-radius: 8px;
-  background: #7c51f3;
+  background: linear-gradient(90deg, #7c51f3 0%, #e91e63 100%);
   color: #fff;
   font-family: Montserrat;
   font-size: 20px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+  border: none;
+}
+
+.btn-gradient {
+  background: linear-gradient(90deg, #7c51f3 0%, #e91e63 100%) !important;
+  border: none !important;
 }
 
 .safe {
