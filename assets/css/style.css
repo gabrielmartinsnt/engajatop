@@ -909,16 +909,3 @@ body.modal-open .modal {
     gap: 12px;
   }
 }
-
-/* Pre-checkout styling */
-.pre-checkout-note {
-  background: #f8f9fa;
-  border: 1px solid #e9ecef;
-  border-radius: 6px;
-  padding: 12px;
-  margin: 16px 0;
-}
-
-#upgram-profile-preview { 
-  padding-top: 8px; 
-}

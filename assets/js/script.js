@@ -102,91 +102,10 @@ jQuery(document).ready(function ($) {
     });
   }
   
-  function findUsernameInput() {
-    let $input = jQuery('input[name="username"]');
-    if (!$input.length) $input = jQuery('input[name="instagram"]');
-    if (!$input.length) $input = jQuery('input[name="handle"]');
-    if (!$input.length) $input = jQuery('#instagram-form input[type="text"]');
-    if (!$input.length) $input = jQuery('input[placeholder*="@"], input[placeholder*="instagram"], input[placeholder*="usuário"]');
-    if (!$input.length) $input = jQuery('input[type="text"]').filter(function() {
-      const label = jQuery(this).closest('.form-group, .input-group, .field').find('label').text().toLowerCase();
-      return label.includes('instagram') || label.includes('usuário') || label.includes('@');
-    });
-    return $input.length ? $input.first() : null;
-  }
-  
-  function ensureProfilePreviewContainer() {
-    const $input = findUsernameInput();
-    if (!$input) return null;
-    
-    let $box = jQuery('#upgram-profile-preview');
-    if (!$box.length) {
-      $box = jQuery('<div id="upgram-profile-preview" style="margin-top:10px;"></div>');
-      const $container = $input.closest('.form-group, .input-group, .field, .form-control, div');
-      if ($container.length) {
-        $container.after($box);
-      } else {
-        $input.after($box);
-      }
-    }
-    return $box;
-  }
-  
-  function renderProfilePreview(username) {
-    const $box = ensureProfilePreviewContainer();
-    if (!$box) return;
-    if (!username) { $box.empty(); return; }
-    const uname = username.replace(/^@/, '').trim();
-    if (!uname) { $box.empty(); return; }
-    const avatar = `https://unavatar.io/instagram/${encodeURIComponent(uname)}`;
-    $box.html(
-      `<div class="d-flex align-items-center gap-2">
-         <img src="${avatar}" alt="@${uname}" style="width:36px;height:36px;border-radius:50%;object-fit:cover" onerror="this.style.display='none'">
-         <div>
-           <div style="font-weight:600;">@${uname}</div>
-           <a href="https://instagram.com/${encodeURIComponent(uname)}" target="_blank" rel="noopener">Abrir perfil</a>
-         </div>
-       </div>`
-    );
-  }
-  
-  function bindProfilePreview(){
-    try {
-      function tryBind() {
-        const $input = findUsernameInput();
-        if (!$input) return false;
-        
-        if ($input.data('upgram-preview-bound')) return true;
-        
-        $input.on('input blur keyup', function(){
-          renderProfilePreview(this.value);
-        });
-        renderProfilePreview($input.val());
-        $input.data('upgram-preview-bound', true);
-        console.log('Instagram profile preview bound to input:', $input[0]);
-        return true;
-      }
-      
-      if (tryBind()) return;
-      
-      const observer = new MutationObserver(() => {
-        if (tryBind()) {
-          observer.disconnect();
-        }
-      });
-      
-      const container = document.getElementById('modal-container') || document.body;
-      observer.observe(container, { childList: true, subtree: true });
-      
-      setTimeout(() => observer.disconnect(), 10000);
-      
-    } catch(e){ console.warn('bindProfilePreview error', e); }
-  }
 
   jQuery(function () {
     formatPackageDropdown();
     setupModalSanitizer();
-    bindProfilePreview();
   });
 
   const licenseKeyPromise = checkLicenseKey();
@@ -273,9 +192,9 @@ jQuery(document).ready(function ($) {
         ...data,
       });
 
-      const checkoutUrl = 'https://engajatop.com/finalizar-compra/';
-      window.location.href = checkoutUrl;
-      return;
+      $("#modal-container").html(html).modal("show");
+      sanitizeDashesIn(document.getElementById("modal-container"));
+      fixValorTotalSeparators(document.getElementById("modal-container"));
     } finally {
       $("[id^='continue-button-icon']").show();
       $("[id^='continue-button-spinner']").hide();
