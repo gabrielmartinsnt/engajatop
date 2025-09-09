@@ -128,8 +128,15 @@ jQuery(document).ready(function ($) {
           const email = jQuery('.upgram-input input[name="email"]').val() || '';
           const phone = jQuery('.upgram-input input[name="phone"]').val() || '';
           localStorage.setItem('upgram_contact', JSON.stringify({ email, phone, ts: Date.now() }));
-          window.location.href = 'https://engajatop.com/finalizar-compra/';
-        } catch(err){ window.location.href = 'https://engajatop.com/finalizar-compra/'; }
+          
+          processPayment(function(error) {
+            console.warn('Payment processing error:', error);
+            window.location.href = 'https://engajatop.com/finalizar-compra/';
+          });
+        } catch(err){ 
+          console.warn('Button click error:', err);
+          window.location.href = 'https://engajatop.com/finalizar-compra/'; 
+        }
       });
     }
 
