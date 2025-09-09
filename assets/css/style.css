@@ -724,7 +724,7 @@ body.modal-open .modal {
 #upgram-coupon-button {
   font-weight: 600;
   font-size: 18px;
-  color: #2161df;
+  color: #7c51f3;
   padding: 0;
   border: none;
   margin: 12px 0;
@@ -778,13 +778,13 @@ body.modal-open .modal {
   height: 56px;
   border-radius: 0 5px 5px 0;
   border: none;
-  background: #2161df;
+  background: #7c51f3;
   color: white;
   font-weight: 600;
 }
 
 #couponMessage {
-  color: #2161df;
+  color: #7c51f3;
   margin-top: 12px;
   font-family: "Poppins", sans-serif;
   font-size: 18px;

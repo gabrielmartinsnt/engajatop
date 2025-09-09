@@ -86,8 +86,45 @@ jQuery(document).ready(function ($) {
     const observer = new MutationObserver(() => {
       sanitizeDashesIn(el);
       fixValorTotalSeparators(el);
+      adjustPaymentModalUI(el);
     });
     observer.observe(el, { childList: true, subtree: true });
+  }
+
+  function adjustPaymentModalUI(root) {
+    const $root = jQuery(root || document);
+    const $modal = $root.find('#paymentModal').length ? $root.find('#paymentModal') : $root.find('.modal.show');
+    if (!$modal.length || $modal.data('upgramAdjusted')) return;
+
+    $modal.find('#upgram-payment-method').css('display','none');
+    $modal.find('#upgram-cpf').addClass('d-none');
+
+    const selected = (window.flowCache?.get && flowCache.get('selectedPrice')) || window._upgramSelectedPrice;
+    if (selected != null) {
+      const el = $modal.find('#totalValue')[0];
+      if (el) el.innerText = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(selected);
+    }
+
+    let $cta = $modal.find('button:contains("Realizar pagamento")').first();
+    if (!$cta.length) {
+      $cta = $modal.find('button.btn, button').last();
+    }
+    if ($cta.length) {
+      $cta.text('Última Etapa');
+      $cta.addClass('btn-continue');
+      $cta.off('click.upgramLastStep').on('click.upgramLastStep', function(e){
+        try {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          const email = jQuery('.upgram-input input[name="email"]').val() || '';
+          const phone = jQuery('.upgram-input input[name="phone"]').val() || '';
+          localStorage.setItem('upgram_contact', JSON.stringify({ email, phone, ts: Date.now() }));
+          window.location.href = 'https://engajatop.com/finalizar-compra/';
+        } catch(err){ window.location.href = 'https://engajatop.com/finalizar-compra/'; }
+      });
+    }
+
+    $modal.data('upgramAdjusted', true);
   }
   
   function formatPackageDropdown() {
@@ -162,6 +199,7 @@ jQuery(document).ready(function ($) {
       $("#modal-container").html(html).modal("show");
       sanitizeDashesIn(document.getElementById("modal-container"));
       fixValorTotalSeparators(document.getElementById("modal-container"));
+      adjustPaymentModalUI(document.getElementById("modal-container"));
     });
   });
 
@@ -195,6 +233,7 @@ jQuery(document).ready(function ($) {
       $("#modal-container").html(html).modal("show");
       sanitizeDashesIn(document.getElementById("modal-container"));
       fixValorTotalSeparators(document.getElementById("modal-container"));
+      adjustPaymentModalUI(document.getElementById("modal-container"));
     } finally {
       $("[id^='continue-button-icon']").show();
       $("[id^='continue-button-spinner']").hide();
@@ -285,6 +324,7 @@ jQuery(document).ready(function ($) {
             $("#modal-container").append(json.data.html);
             sanitizeDashesIn(document.getElementById("modal-container"));
             fixValorTotalSeparators(document.getElementById("modal-container"));
+            adjustPaymentModalUI(document.getElementById("modal-container"));
 
             // HANDLE CPF VISIBILITY
             if (
@@ -340,6 +380,10 @@ jQuery(document).ready(function ($) {
       const item = $(this).data("item");
       const { current, discountPct } = computePriceMeta(item);
       const name = cleanName(item.name);
+
+      window._upgramSelectedPrice = current;
+      try { if (window.flowCache?.set) flowCache.set("selectedPrice", current); } catch(e){}
+
       $("#seguidoresText").html(
         `${name} <span class="price-accent"> ${currencyBRL.format(current)}</span>` +
         (discountPct > 0 ? ` <span class="discount-percent">-${discountPct}%</span>` : '')
@@ -397,6 +441,7 @@ jQuery(document).ready(function ($) {
             $("#modal-container").html(json.data.html);
             sanitizeDashesIn(document.getElementById("modal-container"));
             fixValorTotalSeparators(document.getElementById("modal-container"));
+            adjustPaymentModalUI(document.getElementById("modal-container"));
           } else {
             window.location.href = json.data.redirect_url;
           }
@@ -562,6 +607,7 @@ function loadSuccessModal(orderId) {
         $("#modal-container").html(response.data.html).modal("show");
         sanitizeDashesIn(document.getElementById("modal-container"));
         fixValorTotalSeparators(document.getElementById("modal-container"));
+        adjustPaymentModalUI(document.getElementById("modal-container"));
       }
     },
   });
@@ -581,3 +627,16 @@ const masks = {
     input.value = value;
   },
 };
+
+(function(){
+  try {
+    const path = (location.pathname || '');
+    if (!/finalizar-compra|checkout/i.test(path)) return;
+    const raw = localStorage.getItem('upgram_contact');
+    if (!raw) return;
+    const { email, phone, ts } = JSON.parse(raw) || {};
+    if (email) jQuery('#billing_email, [name="billing_email"]').val(email).trigger('change');
+    if (phone) jQuery('#billing_phone, [name="billing_phone"]').val(phone).trigger('change');
+    if (ts && Date.now() - ts > 5*60*1000) localStorage.removeItem('upgram_contact');
+  } catch(e){}
+})();
